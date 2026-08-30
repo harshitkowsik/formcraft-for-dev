@@ -277,64 +277,13 @@ ${fieldsHtml}
     const subject = encodeURIComponent(EMAIL_SUBJECT);
     const body = encodeURIComponent(summaryBody);
 
-    // Gmail Web fallback for desktop.
-    const gmailWebUrl =
-      "https://mail.google.com/mail/?view=cm" +
-      "&to=" + to +
-      "&su=" + subject +
-      "&body=" + body;
-
-    // Normal email fallback.
+    // Use mailto: to open the user's default email client
     const mailtoUrl =
       "mailto:" + to +
       "?subject=" + subject +
       "&body=" + body;
 
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-    // ==========================================
-    // ANDROID
-    // Try to open Gmail app directly.
-    // If Gmail is not installed, Android opens
-    // the Gmail Web fallback.
-    // ==========================================
-    if (/android/i.test(userAgent)) {
-      const gmailIntent =
-        "intent://co#Intent;" +
-        "scheme=googlegmail;" +
-        "package=com.google.android.gm;" +
-        "S.browser_fallback_url=" +
-        encodeURIComponent(gmailWebUrl) +
-        ";end";
-
-      window.location.href = gmailIntent;
-      return;
-    }
-
-    // ==========================================
-    // iPHONE / iPAD
-    // Try Gmail app first.
-    // If unavailable, fall back to mailto.
-    // ==========================================
-    if (/iPhone|iPad|iPod/i.test(userAgent)) {
-      window.location.href =
-        "googlegmail://co" +
-        "?to=" + to +
-        "&subject=" + subject +
-        "&body=" + body;
-
-      setTimeout(() => {
-        window.location.href = mailtoUrl;
-      }, 1000);
-
-      return;
-    }
-
-    // ==========================================
-    // DESKTOP / LAPTOP
-    // Open Gmail Web compose.
-    // ==========================================
-    window.open(gmailWebUrl, "_blank");
+    window.location.href = mailtoUrl;
   }
 </script>`;
 }
@@ -364,7 +313,7 @@ export function generateReactCode(config: FormConfig): string {
             placeholder="${field.placeholder || ''}"
             rows={4}
             ${isReq}
-            className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text[...]
           />
 
           {errors.${field.name} && (
@@ -399,7 +348,7 @@ export function generateReactCode(config: FormConfig): string {
             value={formData.${field.name} || ''}
             onChange={handleChange}
             ${isReq}
-            className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text[...]
           >
             <option value="" disabled>
               ${field.placeholder || 'Select option'}
@@ -433,7 +382,7 @@ export function generateReactCode(config: FormConfig): string {
           onChange={handleChange}
           placeholder="${field.placeholder || ''}"
           ${isReq}
-          className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-s[...]
         />
 
         {errors.${field.name} && (
@@ -511,62 +460,13 @@ export default function GeneratedForm() {
     const subject = encodeURIComponent(EMAIL_SUBJECT);
     const bodyEncoded = encodeURIComponent(body);
 
-    // Gmail Web fallback for desktop.
-    const gmailWebUrl =
-      "https://mail.google.com/mail/?view=cm" +
-      "&to=" + to +
-      "&su=" + subject +
-      "&body=" + bodyEncoded;
-
-    // Normal email fallback.
+    // Use mailto: to open the user's default email client
     const mailtoUrl =
       "mailto:" + to +
       "?subject=" + subject +
       "&body=" + bodyEncoded;
 
-    const userAgent =
-      navigator.userAgent || navigator.vendor || window.opera;
-
-    // ==========================================
-    // ANDROID
-    // Try Gmail app directly.
-    // ==========================================
-    if (/android/i.test(userAgent)) {
-      const gmailIntent =
-        "intent://co#Intent;" +
-        "scheme=googlegmail;" +
-        "package=com.google.android.gm;" +
-        "S.browser_fallback_url=" +
-        encodeURIComponent(gmailWebUrl) +
-        ";end";
-
-      window.location.href = gmailIntent;
-      return;
-    }
-
-    // ==========================================
-    // iPHONE / iPAD
-    // Try Gmail app first.
-    // ==========================================
-    if (/iPhone|iPad|iPod/i.test(userAgent)) {
-      window.location.href =
-        "googlegmail://co" +
-        "?to=" + to +
-        "&subject=" + subject +
-        "&body=" + bodyEncoded;
-
-      setTimeout(() => {
-        window.location.href = mailtoUrl;
-      }, 1000);
-
-      return;
-    }
-
-    // ==========================================
-    // DESKTOP / LAPTOP
-    // Open Gmail Web compose.
-    // ==========================================
-    window.open(gmailWebUrl, "_blank");
+    window.location.href = mailtoUrl;
   };
 
   return (

@@ -53,8 +53,8 @@ export function PreviewTab({ config, theme = 'dark' }: PreviewTabProps) {
     const body = encodeURIComponent(emailBody);
     const recipient = encodeURIComponent(config.recipientEmail || 'contact@example.com');
 
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${recipient}&su=${subject}&body=${body}`;
-    window.open(gmailUrl, '_blank');
+    const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoUrl;
   };
 
   const handleReset = () => {
@@ -77,7 +77,7 @@ export function PreviewTab({ config, theme = 'dark' }: PreviewTabProps) {
         </span>
         
         <p className={`text-xs ${subTextClass} mt-2`}>
-          Test validation rules and Gmail mailto integration with your form configuration.
+          Test validation rules and mailto: integration with your form configuration.
         </p>
       </div>
 
@@ -90,7 +90,7 @@ export function PreviewTab({ config, theme = 'dark' }: PreviewTabProps) {
             <div>
               <h3 className={`text-lg font-semibold ${headingClass}`}>Form Submitted</h3>
               <p className={`text-xs ${subTextClass} mt-1`}>
-                Gmail has opened with pre-filled recipient: <span className={`font-mono ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>{config.recipientEmail}</span>
+                Email client has opened with pre-filled recipient: <span className={`font-mono ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>{config.recipientEmail}</span>
               </p>
             </div>
 
@@ -194,7 +194,7 @@ export function PreviewTab({ config, theme = 'dark' }: PreviewTabProps) {
                   <button
                     type="button"
                     onClick={handleReset}
-                    className={`py-2.5 px-4 ${isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-zinc-700' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-700 border-zinc-300'} text-xs font-medium border ${config.borderRadius} transition-colors`}
+                    className={`py-2.5 px-4 ${isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-zinc-700' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-700 border-zinc-300'} text-xs font-medium border rounded transition-colors`}
                   >
                     Reset
                   </button>
