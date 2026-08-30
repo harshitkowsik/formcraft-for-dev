@@ -5,13 +5,17 @@ export function generateHtmlCode(config: FormConfig): string {
     .filter((f) => f.enabled)
     .map((field) => {
       const isRequired = field.required ? 'required' : '';
-      const reqMark = field.required ? '<span class="fc-required">*</span>' : '';
-      
+      const reqMark = field.required
+        ? '<span class="fc-required">*</span>'
+        : '';
+
       if (field.type === 'textarea') {
         return `
       <!-- ${field.label} -->
       <div class="fc-group">
-        <label for="${field.name}" class="fc-label">${field.label} ${reqMark}</label>
+        <label for="${field.name}" class="fc-label">
+          ${field.label} ${reqMark}
+        </label>
         <textarea
           id="${field.name}"
           name="${field.name}"
@@ -27,17 +31,22 @@ export function generateHtmlCode(config: FormConfig): string {
         const optionsHtml = (field.options || [])
           .map((opt) => `<option value="${opt}">${opt}</option>`)
           .join('\n          ');
+
         return `
       <!-- ${field.label} -->
       <div class="fc-group">
-        <label for="${field.name}" class="fc-label">${field.label} ${reqMark}</label>
+        <label for="${field.name}" class="fc-label">
+          ${field.label} ${reqMark}
+        </label>
         <select
           id="${field.name}"
           name="${field.name}"
           ${isRequired}
           class="fc-input fc-select"
         >
-          <option value="" disabled selected>${field.placeholder || 'Select option'}</option>
+          <option value="" disabled selected>
+            ${field.placeholder || 'Select option'}
+          </option>
           ${optionsHtml}
         </select>
       </div>`;
@@ -46,7 +55,9 @@ export function generateHtmlCode(config: FormConfig): string {
       return `
       <!-- ${field.label} -->
       <div class="fc-group">
-        <label for="${field.name}" class="fc-label">${field.label} ${reqMark}</label>
+        <label for="${field.name}" class="fc-label">
+          ${field.label} ${reqMark}
+        </label>
         <input
           type="${field.type}"
           id="${field.name}"
@@ -59,7 +70,14 @@ export function generateHtmlCode(config: FormConfig): string {
     })
     .join('\n');
 
-  const radiusValue = config.borderRadius === 'rounded-none' ? '0px' : config.borderRadius === 'rounded-2xl' ? '16px' : '8px';
+  const radiusValue =
+    config.borderRadius === 'rounded-none'
+      ? '0px'
+      : config.borderRadius === 'rounded-2xl'
+      ? '16px'
+      : '8px';
+
+  const emailSubject = config.emailSubjectPrefix || '';
 
   return `<!-- ================================================= -->
 <!-- ZERO-DEPENDENCY STANDALONE FORM COMPONENT         -->
@@ -89,31 +107,47 @@ export function generateHtmlCode(config: FormConfig): string {
     color: var(--fc-text);
     border: 1px solid var(--fc-border);
     border-radius: var(--fc-radius);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.05),
+      0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
     box-sizing: border-box;
   }
-  .fc-wrapper *, .fc-wrapper *::before, .fc-wrapper *::after {
+
+  .fc-wrapper *,
+  .fc-wrapper *::before,
+  .fc-wrapper *::after {
     box-sizing: border-box;
   }
+
   .fc-header {
     margin-bottom: 24px;
   }
+
   .fc-title {
     font-size: 24px;
     font-weight: 700;
     color: var(--fc-text);
     margin: 0 0 6px 0;
   }
+
   .fc-description {
     font-size: 14px;
     color: var(--fc-muted);
     margin: 0;
     line-height: 1.5;
   }
+
   .fc-group {
     margin-bottom: 18px;
   }
+
   .fc-label {
     display: block;
     font-size: 13px;
@@ -121,10 +155,12 @@ export function generateHtmlCode(config: FormConfig): string {
     color: var(--fc-text);
     margin-bottom: 6px;
   }
+
   .fc-required {
     color: var(--fc-error);
     margin-left: 2px;
   }
+
   .fc-input {
     width: 100%;
     padding: 11px 14px;
@@ -134,21 +170,27 @@ export function generateHtmlCode(config: FormConfig): string {
     border: 1px solid var(--fc-border);
     border-radius: var(--fc-radius);
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
   }
+
   .fc-input:focus {
     border-color: var(--fc-primary);
     box-shadow: 0 0 0 2px rgba(9, 9, 11, 0.1);
   }
+
   .fc-textarea {
     resize: vertical;
     min-height: 100px;
   }
+
   .fc-actions {
     display: flex;
     gap: 12px;
     margin-top: 24px;
   }
+
   .fc-btn-submit {
     flex: 1;
     padding: 12px 20px;
@@ -161,9 +203,11 @@ export function generateHtmlCode(config: FormConfig): string {
     cursor: pointer;
     transition: background 0.2s;
   }
+
   .fc-btn-submit:hover {
     background: var(--fc-primary-hover);
   }
+
   .fc-btn-reset {
     padding: 12px 18px;
     font-size: 14px;
@@ -175,6 +219,7 @@ export function generateHtmlCode(config: FormConfig): string {
     cursor: pointer;
     transition: background 0.2s;
   }
+
   .fc-btn-reset:hover {
     background: #e4e4e7;
   }
@@ -196,6 +241,7 @@ ${fieldsHtml}
       >
         ${config.submitButtonText}
       </button>
+
       ${
         config.showResetButton
           ? `<button
@@ -212,21 +258,28 @@ ${fieldsHtml}
 
 <script>
   const RECIPIENT_EMAIL = "${config.recipientEmail}";
-  const EMAIL_SUBJECT = "${config.emailSubjectPrefix}";
+  const EMAIL_SUBJECT = "${emailSubject}";
 
   function handleFormSubmit(event) {
     event.preventDefault();
+
     const form = event.target;
     const formData = new FormData(form);
-    
-    let summaryBody = "New Form Submission Details:\\n\\n";
-    for (let [key, value] of formData.entries()) {
-      summaryBody += \`\${key.toUpperCase()}: \${value}\\n\`;
-    }
-    summaryBody += "\\n--- Sent via FormCraft Generator ---";
 
-    const mailtoUrl = \`https://mail.google.com/mail/?view=cm&to=\${encodeURIComponent(RECIPIENT_EMAIL)}&su=\${encodeURIComponent(EMAIL_SUBJECT)}&body=\${encodeURIComponent(summaryBody)}\`;
-    window.open(mailtoUrl, '_blank');
+    // Build email body using only submitted form fields.
+    let summaryBody = "";
+
+    for (let [key, value] of formData.entries()) {
+      summaryBody += key.toUpperCase() + ": " + value + "\\n";
+    }
+
+    const mailtoUrl =
+      "https://mail.google.com/mail/?view=cm" +
+      "&to=" + encodeURIComponent(RECIPIENT_EMAIL) +
+      "&su=" + encodeURIComponent(EMAIL_SUBJECT) +
+      "&body=" + encodeURIComponent(summaryBody);
+
+    window.open(mailtoUrl, "_blank");
   }
 </script>`;
 }
@@ -236,13 +289,19 @@ export function generateReactCode(config: FormConfig): string {
     .filter((f) => f.enabled)
     .map((field) => {
       const isReq = field.required ? 'required' : '';
+
       if (field.type === 'textarea') {
         return `
         {/* ${field.label} */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            ${field.label} {${field.required} && <span className="text-red-500">*</span>}
+            ${field.label} ${
+              field.required
+                ? `<span className="text-red-500">*</span>`
+                : ''
+            }
           </label>
+
           <textarea
             name="${field.name}"
             value={formData.${field.name} || ''}
@@ -252,18 +311,34 @@ export function generateReactCode(config: FormConfig): string {
             ${isReq}
             className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
           />
-          {errors.${field.name} && <p className="text-xs text-red-500 mt-1">{errors.${field.name}}</p>}
+
+          {errors.${field.name} && (
+            <p className="text-xs text-red-500 mt-1">
+              {errors.${field.name}}
+            </p>
+          )}
         </div>`;
       }
 
       if (field.type === 'select') {
-        const optionsList = (field.options || []).map((o) => `\n            <option value="${o}">${o}</option>`).join('');
+        const optionsList = (field.options || [])
+          .map(
+            (o) => `
+            <option value="${o}">${o}</option>`
+          )
+          .join('');
+
         return `
         {/* ${field.label} */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            ${field.label} {${field.required} && <span className="text-red-500">*</span>}
+            ${field.label} ${
+              field.required
+                ? `<span className="text-red-500">*</span>`
+                : ''
+            }
           </label>
+
           <select
             name="${field.name}"
             value={formData.${field.name} || ''}
@@ -271,9 +346,17 @@ export function generateReactCode(config: FormConfig): string {
             ${isReq}
             className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
           >
-            <option value="" disabled>${field.placeholder || 'Select option'}</option>${optionsList}
+            <option value="" disabled>
+              ${field.placeholder || 'Select option'}
+            </option>
+            ${optionsList}
           </select>
-          {errors.${field.name} && <p className="text-xs text-red-500 mt-1">{errors.${field.name}}</p>}
+
+          {errors.${field.name} && (
+            <p className="text-xs text-red-500 mt-1">
+              {errors.${field.name}}
+            </p>
+          )}
         </div>`;
       }
 
@@ -281,8 +364,13 @@ export function generateReactCode(config: FormConfig): string {
       {/* ${field.label} */}
       <div>
         <label className="block text-sm font-medium text-slate-700 mb-1">
-          ${field.label} {${field.required} && <span className="text-red-500">*</span>}
+          ${field.label} ${
+            field.required
+              ? `<span className="text-red-500">*</span>`
+              : ''
+          }
         </label>
+
         <input
           type="${field.type}"
           name="${field.name}"
@@ -292,40 +380,63 @@ export function generateReactCode(config: FormConfig): string {
           ${isReq}
           className="w-full px-4 py-2.5 text-slate-800 bg-white border border-slate-300 ${config.borderRadius} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
         />
-        {errors.${field.name} && <p className="text-xs text-red-500 mt-1">{errors.${field.name}}</p>}
+
+        {errors.${field.name} && (
+          <p className="text-xs text-red-500 mt-1">
+            {errors.${field.name}}
+          </p>
+        )}
       </div>`;
     })
     .join('\n');
+
+  // Only use the configured subject.
+  // No automatic "New Form Submission (...)" subject.
+  const emailSubject = config.emailSubjectPrefix || '';
 
   return `import React, { useState } from 'react';
 
 export default function GeneratedForm() {
   const RECIPIENT_EMAIL = "${config.recipientEmail}";
-  const EMAIL_SUBJECT = "${config.emailSubjectPrefix}";
+  const EMAIL_SUBJECT = "${emailSubject}";
 
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+
     // Clear error on change
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined
+      }));
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Simple validation check
     const newErrors = {};
+
     ${config.fields
       .filter((f) => f.enabled && f.required)
       .map(
         (f) => `
-    if (!formData.${f.name} || !formData.${f.name}.trim()) {
-      newErrors.${f.name} = "${f.customError || f.label + ' is required.'}";
+    if (
+      !formData.${f.name} ||
+      !String(formData.${f.name}).trim()
+    ) {
+      newErrors.${f.name} = "${
+          f.customError || f.label + ' is required.'
+        }";
     }`
       )
       .join('')}
@@ -335,22 +446,32 @@ export default function GeneratedForm() {
       return;
     }
 
-    // Build email body format
-    let body = "New Form Submission:\\n\\n";
-    Object.entries(formData).forEach(([key, val]) => {
-      body += \`\${key.toUpperCase()}: \${val}\\n\`;
-    });
-    body += "\\n--- Submitted via FormCraft React Component ---";
+    // Build email body using only submitted form fields.
+    let body = "";
 
-    const gmailUrl = \`https://mail.google.com/mail/?view=cm&to=\${encodeURIComponent(RECIPIENT_EMAIL)}&su=\${encodeURIComponent(EMAIL_SUBJECT)}&body=\${encodeURIComponent(body)}\`;
-    window.open(gmailUrl, '_blank');
+    Object.entries(formData).forEach(([key, val]) => {
+      body += key.toUpperCase() + ": " + val + "\\n";
+    });
+
+    const gmailUrl =
+      "https://mail.google.com/mail/?view=cm" +
+      "&to=" + encodeURIComponent(RECIPIENT_EMAIL) +
+      "&su=" + encodeURIComponent(EMAIL_SUBJECT) +
+      "&body=" + encodeURIComponent(body);
+
+    window.open(gmailUrl, "_blank");
   };
 
   return (
     <div className="max-w-xl mx-auto p-6 sm:p-8 bg-white border border-slate-200 shadow-xl ${config.borderRadius}">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-900">${config.formTitle}</h2>
-        <p className="text-sm text-slate-600 mt-1">${config.formDescription}</p>
+        <h2 className="text-2xl font-bold text-slate-900">
+          ${config.formTitle}
+        </h2>
+
+        <p className="text-sm text-slate-600 mt-1">
+          ${config.formDescription}
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -363,11 +484,15 @@ export default function GeneratedForm() {
           >
             ${config.submitButtonText}
           </button>
+
           ${
             config.showResetButton
               ? `<button
             type="button"
-            onClick={() => setFormData({})}
+            onClick={() => {
+              setFormData({});
+              setErrors({});
+            }}
             className="py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium ${config.borderRadius} transition-all"
           >
             Reset
