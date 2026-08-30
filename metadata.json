@@ -1,0 +1,7 @@
+{
+  "name": "FormCraft - Dynamic Form Generator",
+  "description": "Interactive dynamic form builder with custom fields, floating labels, validation, and zero-dependency copy-paste code export for HTML and React.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
