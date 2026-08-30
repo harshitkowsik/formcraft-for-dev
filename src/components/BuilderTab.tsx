@@ -255,7 +255,6 @@ export function BuilderTab({ config, setConfig, onOpenTemplates, onSwitchToPrevi
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 flex-1">
                       <button type="button" className={`${subTextClass} cursor-grab`}>
-                        <GripVertical className="w-4 h-4" />
                       </button>
                       <input
                         type="checkbox"
