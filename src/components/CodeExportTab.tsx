@@ -93,7 +93,7 @@ export function CodeExportTab({ config, theme = 'dark' }: CodeExportTabProps) {
               onClick={handleDownload}
               className={`flex items-center gap-1.5 px-3 py-1.5 ${isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700' : 'bg-zinc-200 hover:bg-zinc-300 text-zinc-800 border-zinc-300'} text-xs font-medium rounded transition-colors border`}
             >
-              <Download className="w-3.5 h-3.5" /> Download
+              <Download className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={handleCopy}
