@@ -77,7 +77,7 @@ export function generateHtmlCode(config: FormConfig): string {
       ? '16px'
       : '8px';
 
-  const emailSubject = config.emailSubjectPrefix || '';
+  const emailSubject = config.emailSubjectPrefix || config.formTitle;
 
   return `<!-- ================================================= -->
 <!-- ZERO-DEPENDENCY STANDALONE FORM COMPONENT         -->
@@ -258,7 +258,7 @@ ${fieldsHtml}
 
 <script>
   const RECIPIENT_EMAIL = "${config.recipientEmail}";
-  const EMAIL_SUBJECT = "${emailSubject}";
+  const EMAIL_SUBJECT = "New Form Submission (${emailSubject})";
 
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -390,9 +390,7 @@ export function generateReactCode(config: FormConfig): string {
     })
     .join('\n');
 
-  // Only use the configured subject.
-  // No automatic "New Form Submission (...)" subject.
-  const emailSubject = config.emailSubjectPrefix || '';
+  const emailSubject = `New Form Submission (${config.emailSubjectPrefix || config.formTitle})`;
 
   return `import React, { useState } from 'react';
 
