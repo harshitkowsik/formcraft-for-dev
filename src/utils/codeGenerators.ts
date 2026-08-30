@@ -74,8 +74,8 @@ export function generateHtmlCode(config: FormConfig): string {
     config.borderRadius === 'rounded-none'
       ? '0px'
       : config.borderRadius === 'rounded-2xl'
-      ? '16px'
-      : '8px';
+        ? '16px'
+        : '8px';
 
   const emailSubject = config.emailSubjectPrefix || config.formTitle;
 
@@ -273,13 +273,68 @@ ${fieldsHtml}
       summaryBody += key.toUpperCase() + ": " + value + "\\n";
     }
 
-    const mailtoUrl =
-      "https://mail.google.com/mail/?view=cm" +
-      "&to=" + encodeURIComponent(RECIPIENT_EMAIL) +
-      "&su=" + encodeURIComponent(EMAIL_SUBJECT) +
-      "&body=" + encodeURIComponent(summaryBody);
+    const to = encodeURIComponent(RECIPIENT_EMAIL);
+    const subject = encodeURIComponent(EMAIL_SUBJECT);
+    const body = encodeURIComponent(summaryBody);
 
-    window.open(mailtoUrl, "_blank");
+    // Gmail Web fallback for desktop.
+    const gmailWebUrl =
+      "https://mail.google.com/mail/?view=cm" +
+      "&to=" + to +
+      "&su=" + subject +
+      "&body=" + body;
+
+    // Normal email fallback.
+    const mailtoUrl =
+      "mailto:" + to +
+      "?subject=" + subject +
+      "&body=" + body;
+
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    // ==========================================
+    // ANDROID
+    // Try to open Gmail app directly.
+    // If Gmail is not installed, Android opens
+    // the Gmail Web fallback.
+    // ==========================================
+    if (/android/i.test(userAgent)) {
+      const gmailIntent =
+        "intent://co#Intent;" +
+        "scheme=googlegmail;" +
+        "package=com.google.android.gm;" +
+        "S.browser_fallback_url=" +
+        encodeURIComponent(gmailWebUrl) +
+        ";end";
+
+      window.location.href = gmailIntent;
+      return;
+    }
+
+    // ==========================================
+    // iPHONE / iPAD
+    // Try Gmail app first.
+    // If unavailable, fall back to mailto.
+    // ==========================================
+    if (/iPhone|iPad|iPod/i.test(userAgent)) {
+      window.location.href =
+        "googlegmail://co" +
+        "?to=" + to +
+        "&subject=" + subject +
+        "&body=" + body;
+
+      setTimeout(() => {
+        window.location.href = mailtoUrl;
+      }, 1000);
+
+      return;
+    }
+
+    // ==========================================
+    // DESKTOP / LAPTOP
+    // Open Gmail Web compose.
+    // ==========================================
+    window.open(gmailWebUrl, "_blank");
   }
 </script>`;
 }
@@ -390,7 +445,8 @@ export function generateReactCode(config: FormConfig): string {
     })
     .join('\n');
 
-  const emailSubject = `New Form Submission (${config.emailSubjectPrefix || config.formTitle})`;
+  const emailSubject =
+    `New Form Submission (${config.emailSubjectPrefix || config.formTitle})`;
 
   return `import React, { useState } from 'react';
 
@@ -433,8 +489,8 @@ export default function GeneratedForm() {
       !String(formData.${f.name}).trim()
     ) {
       newErrors.${f.name} = "${
-          f.customError || f.label + ' is required.'
-        }";
+        f.customError || f.label + ' is required.'
+      }";
     }`
       )
       .join('')}
@@ -451,13 +507,66 @@ export default function GeneratedForm() {
       body += key.toUpperCase() + ": " + val + "\\n";
     });
 
-    const gmailUrl =
-      "https://mail.google.com/mail/?view=cm" +
-      "&to=" + encodeURIComponent(RECIPIENT_EMAIL) +
-      "&su=" + encodeURIComponent(EMAIL_SUBJECT) +
-      "&body=" + encodeURIComponent(body);
+    const to = encodeURIComponent(RECIPIENT_EMAIL);
+    const subject = encodeURIComponent(EMAIL_SUBJECT);
+    const bodyEncoded = encodeURIComponent(body);
 
-    window.open(gmailUrl, "_blank");
+    // Gmail Web fallback for desktop.
+    const gmailWebUrl =
+      "https://mail.google.com/mail/?view=cm" +
+      "&to=" + to +
+      "&su=" + subject +
+      "&body=" + bodyEncoded;
+
+    // Normal email fallback.
+    const mailtoUrl =
+      "mailto:" + to +
+      "?subject=" + subject +
+      "&body=" + bodyEncoded;
+
+    const userAgent =
+      navigator.userAgent || navigator.vendor || window.opera;
+
+    // ==========================================
+    // ANDROID
+    // Try Gmail app directly.
+    // ==========================================
+    if (/android/i.test(userAgent)) {
+      const gmailIntent =
+        "intent://co#Intent;" +
+        "scheme=googlegmail;" +
+        "package=com.google.android.gm;" +
+        "S.browser_fallback_url=" +
+        encodeURIComponent(gmailWebUrl) +
+        ";end";
+
+      window.location.href = gmailIntent;
+      return;
+    }
+
+    // ==========================================
+    // iPHONE / iPAD
+    // Try Gmail app first.
+    // ==========================================
+    if (/iPhone|iPad|iPod/i.test(userAgent)) {
+      window.location.href =
+        "googlegmail://co" +
+        "?to=" + to +
+        "&subject=" + subject +
+        "&body=" + bodyEncoded;
+
+      setTimeout(() => {
+        window.location.href = mailtoUrl;
+      }, 1000);
+
+      return;
+    }
+
+    // ==========================================
+    // DESKTOP / LAPTOP
+    // Open Gmail Web compose.
+    // ==========================================
+    window.open(gmailWebUrl, "_blank");
   };
 
   return (
